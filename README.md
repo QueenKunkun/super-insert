@@ -22,22 +22,29 @@ So I created my own tool. It supports:
 - Command: `Super insert` - Insert sequences, numbers or dates
   - Keybindings: `(ctrl|cmd)+alt+n`
   - Basic numbers
-  ![Numbers](images/Basic.gif)
+
+    ![Numbers](images/Basic.gif)
   - Decimals/Fraction numbers
-  ![Numbers](images/Decimals.gif)
+
+    ![Numbers](images/Decimals.gif)
   - Random numbers
-  ![Random numbers](images/Randoms.gif)
+
+    ![Random numbers](images/Randoms.gif)
   - Dates
-  ![Dates](images/Dates.gif)
+
+    ![Dates](images/Dates.gif)
   - Sequences
-  ![Sequences](images/Sequences.gif)
+
+    ![Sequences](images/Sequences.gif)
 
 - Command: `Super insert: Shortcut` - Do the insertion with predefined shortcuts
   - Keybindings: `(ctrl|cmd)+alt+y`
-  ![Shortcuts](images/Shortcuts.gif)
+
+    ![Shortcuts](images/Shortcuts.gif)
 
 - Command: `Super insert: History` - Do the insertion from input history
-  ![History](images/History.gif)
+
+    ![History](images/History.gif)
 
 ## Input
 
