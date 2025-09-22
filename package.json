@@ -1,0 +1,86 @@
+{
+  "name": "super-insert",
+  "displayName": "Super Insert",
+  "license": "MIT",
+  "publisher": "KristinZhang",
+  "description": "Insert Sequences or Numbers or Dates, and customizable via vscode settings",
+  "repository": {
+    "url": "https://github.com/QueenKunkun/super-insert"
+  },
+  "bugs": {
+    "url": "https://github.com/QueenKunkun/super-insert/issues",
+    "email": "742711819@qq.com"
+  },
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.1.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "super-insert.base",
+        "title": "Super insert"
+      },
+      {
+        "command": "super-insert.shortcut",
+        "title": "Super insert: Shortcut"
+      },
+      {
+        "command": "super-insert.history",
+        "title": "Super insert: History"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "super-insert.base",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "super-insert.shortcut",
+        "key": "ctrl+alt+y",
+        "mac": "cmd+alt+y",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.34.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
+  },
+  "keywords": [
+    "insert numbers",
+    "insert sequential numbers",
+    "insert date and time"
+  ],
+  "dependencies": {
+    "@datadocs/rose-formatter": "^1.0.1"
+  }
+}
