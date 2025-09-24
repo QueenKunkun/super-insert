@@ -11,7 +11,7 @@
     "url": "https://github.com/QueenKunkun/super-insert/issues",
     "email": "742711819@qq.com"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.1.0"
   },
@@ -78,9 +78,10 @@
   "keywords": [
     "insert numbers",
     "insert sequential numbers",
-    "insert date and time"
+    "insert date and time",
+    "excel-like format"
   ],
   "dependencies": {
-    "@datadocs/rose-formatter": "^1.0.1"
+    "@datadocs/rose-formatter": "github:QueenKunkun/rose-formatter"
   }
 }

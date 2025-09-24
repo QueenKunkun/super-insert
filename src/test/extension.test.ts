@@ -4,9 +4,7 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { getSeconds } from '../unit';
-import { TextRenderer } from '@datadocs/rose-formatter';
-import { BuiltInSequences } from '../BuiltInSequences';
-// import * as myExtension from '../../extension';
+import { TextRenderer } from '../../rose-formatter';
 
 suite('Utils Test Sutie', () => {
 	vscode.window.showInformationMessage('Start all tests.');

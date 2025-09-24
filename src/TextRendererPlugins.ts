@@ -1,5 +1,5 @@
 
-import { Plugin } from '@datadocs/rose-formatter';
+import { Plugin } from '../rose-formatter';
 import { CN_MONTH_NAMES, CN_WEEKDAYS } from './BuiltInSequences';
 
 const ZH_CN = 'zh-CN';

@@ -266,6 +266,28 @@ All settings are under `superinsert` property.
 }
 ```
 
+## Development
+
+### Build
+
+This project depends on a [fork repo](https://github.com/QueenKunkun/super-insert.git) of [datadocs/rose-formatter](https://github.com/datadocs/rose-formatter), for customizations.
+
+So I added it as a submodule, to correctly build it, you need to clone and build the submodule as well.
+
+```bash
+git clone --recurse-submodules https://github.com/QueenKunkun/super-insert.git
+cd super-insert
+# build the submodule first
+cd rose-formatter
+npm i
+npm run build
+
+# build this extension
+cd ..
+npm i
+npm run package # or debug directly, more information please see vscode's development guide
+```
+
 ## Thanks
 
 - [Inori/vscode-InsertNumbers: Insert Numbers extension for vscode](https://github.com/Inori/vscode-InsertNumbers)

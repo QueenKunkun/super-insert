@@ -3,10 +3,11 @@ import { ISequnce, isNumber, IStep, parseNumber, InsertState } from "./core";
 import * as vscode from 'vscode';
 import { DateValue, isNow, isRandom, NumberValue, RandomValue } from "./Value";
 import { OriginalTextRenderer, SequenceRenderer } from "./TextRenderers";
-import { TextRenderer } from "@datadocs/rose-formatter";
+// import { TextRenderer } from "@datadocs/rose-formatter";
 import { getSeconds } from "./unit";
 import { FORMAT_DEFAULT_DATE, InsertSettngs } from "./InsertSettngs";
 import { getPlugin } from "./TextRendererPlugins";
+import { TextRenderer } from "../rose-formatter";
 
 export async function parseUserInput(input: string | undefined, settings: InsertSettngs) {
 
