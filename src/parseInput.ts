@@ -1,30 +1,36 @@
 import { searchInBuiltInSequences } from "./BuiltInSequences";
-import { ISequnce, isNumber, IStep, parseNumber, SequenceSetting } from "./core";
+import { ISequnce, isNumber, IStep, parseNumber, InsertState } from "./core";
 import * as vscode from 'vscode';
 import { DateValue, isNow, isRandom, NumberValue, RandomValue } from "./Value";
 import { OriginalTextRenderer, SequenceRenderer } from "./TextRenderers";
 import { TextRenderer } from "@datadocs/rose-formatter";
 import { getSeconds } from "./unit";
-import { FORMAT_DEFAULT_DATE, FORMAT_DEFAULT_RANDOM, InsertSettngs, DEFAULT_DATE_STEP, DEFAULT_START, DEFAULT_STEP } from "./InsertSettngs";
+import { FORMAT_DEFAULT_DATE, InsertSettngs } from "./InsertSettngs";
+import { getPlugin } from "./TextRendererPlugins";
 
-export async function parseUserInput(input: string | undefined, _settings: InsertSettngs) {
+export async function parseUserInput(input: string | undefined, settings: InsertSettngs) {
 
     if (typeof input === 'undefined') {
         return undefined;
     }
 
-    const defaultStart = _settings?.getDefaultStart();
-    const defaultStep = _settings?.getDefaultStep();
-    const defaultDateStep = _settings?.getDefaultDateStep();
+    const newRenderer = (format:string) => {
+        const locale = settings.defaultLocale;
+        return new TextRenderer(format, getPlugin(locale));
+    }
 
-    const settings: SequenceSetting = {
+    const defaultStart = settings?.getDefaultStart();
+    const defaultStep = settings?.getDefaultStep();
+    const defaultDateStep = settings?.getDefaultDateStep();
+
+    const state: InsertState = {
         value: new NumberValue(defaultStart),
         step: 1,
-        formatter: new OriginalTextRenderer()
+        renderer: new OriginalTextRenderer()
     };
 
     if (!input) {
-        return settings;
+        return state;
     }
 
     // const [start, step, format] = input.split(/>?\\:/);
@@ -54,8 +60,8 @@ export async function parseUserInput(input: string | undefined, _settings: Inser
             }
 
             if (seq) {
-                settings.formatter = new SequenceRenderer(seq);
-                settings.value = new NumberValue(seq.findIndex(start));
+                state.renderer = new SequenceRenderer(seq);
+                state.value = new NumberValue(seq.findIndex(start));
             }
         } else {
 
@@ -78,18 +84,18 @@ export async function parseUserInput(input: string | undefined, _settings: Inser
 
                 let format: string | undefined = rest.find(x => !isNumber(x));
                 if (typeof format === 'undefined') {
-                    if (typeof _settings?.defaultRandomFormat !== 'undefined') {
-                        settings.formatter = new TextRenderer(_settings?.defaultRandomFormat);
+                    if (typeof settings?.defaultRandomFormat !== 'undefined') {
+                        state.renderer = newRenderer(settings?.defaultRandomFormat);
                     }
                 } else {
-                    settings.formatter = new TextRenderer(format);
+                    state.renderer = newRenderer(format);
                 }
 
-                settings.value = new RandomValue(min, max);
-                return settings;
+                state.value = new RandomValue(min, max);
+                return state;
             }
 
-            settings.value = new DateValue(new Date());
+            state.value = new DateValue(new Date());
             if (isNow(start)) {
                 // e.g. [now:yyyy-MM-dd hh\:mm\:ss]
                 // or [now:1d:yyyy-MM-dd hh\:mm\:ss]
@@ -97,41 +103,41 @@ export async function parseUserInput(input: string | undefined, _settings: Inser
                 let format = rest[0];
                 if (valid && typeof step === 'number') {
                     format = rest[1];
-                    settings.step = step;
+                    state.step = step;
                 } else {
-                    settings.step = defaultDateStep;
+                    state.step = defaultDateStep;
                 }
 
                 if (!format) {
-                    format = _settings?.defaultDateFormat ?? FORMAT_DEFAULT_DATE;
+                    format = settings?.defaultDateFormat ?? FORMAT_DEFAULT_DATE;
                 }
 
-                settings.formatter = new TextRenderer(format);
+                state.renderer = newRenderer(format);
             } else {
                 // e.g. [yyyy-MM-dd hh\:mm\:ss]
-                settings.formatter = new TextRenderer(start);
-                settings.step = defaultDateStep;
+                state.renderer = newRenderer(start);
+                state.step = defaultDateStep;
             }
-            return settings;
+            return state;
         }
     } else {
-        settings.value = new NumberValue(_start);
+        state.value = new NumberValue(_start);
     }
 
     let [step, format] = rest;
-    let settings_step: IStep | undefined;
-    if (typeof step !== 'undefined') { settings_step = parseNumber(step); }
+    let _step: IStep | undefined;
+    if (typeof step !== 'undefined') { _step = parseNumber(step); }
 
-    if (typeof format !== 'undefined') { settings.formatter = new TextRenderer(format); }
+    if (typeof format !== 'undefined') { state.renderer = newRenderer(format); }
 
-    if (typeof settings_step === 'undefined' || isNaN(settings_step)) {
+    if (typeof _step === 'undefined' || isNaN(_step)) {
         if (typeof format === 'undefined' && typeof step === 'string') {
-            settings.formatter = new TextRenderer(step);
+            state.renderer = newRenderer(step);
         }
-        settings.step = defaultStep;
+        state.step = defaultStep;
     } else {
-        settings.step = settings_step;
+        state.step = _step;
     }
 
-    return settings;
+    return state;
 }

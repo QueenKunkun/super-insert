@@ -1,7 +1,7 @@
 'use strict';
 import * as vscode from 'vscode';
-import { InsertSettngs, isValidShortcut, shortcutToSettings, Shortcut, DEFAULT_STEP, DEFAULT_START } from './InsertSettngs';
-import { SequenceSetting } from './core';
+import { InsertSettngs, isValidShortcut, shortcutToState, Shortcut, DEFAULT_STEP, DEFAULT_START } from './InsertSettngs';
+import { InsertState } from './core';
 import { parseUserInput } from './parseInput';
 import { getInputHistory, saveInputHistory } from './history';
 import { createQuickPick } from './quickPick';
@@ -9,9 +9,9 @@ import { createQuickPick } from './quickPick';
 // hack for new line
 const LN_BR = "\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000\u3000";
 
-function getInsertUserInput(value?: string, _settings?: InsertSettngs | undefined) {
-    const defaultStart = _settings?.getDefaultStart();
-    const defaultStep = _settings?.getDefaultStep();
+function getUserInput(value?: string, settings?: InsertSettngs | undefined) {
+    const defaultStart = settings?.getDefaultStart();
+    const defaultStep = settings?.getDefaultStep();
 
     const opt: vscode.InputBoxOptions = {
         ignoreFocusOut: true,
@@ -28,7 +28,7 @@ function getInsertUserInput(value?: string, _settings?: InsertSettngs | undefine
     return input;
 }
 
-export class SequenceInserter {
+export class SuperInserter {
 
     private _settings: InsertSettngs;
 
@@ -36,13 +36,14 @@ export class SequenceInserter {
         this._settings = settings;
     }
 
-    private insertSequences(settings: SequenceSetting) {
+    private insertSequences(state: InsertState) {
+
         let textEditor = vscode.window.activeTextEditor;
         if (!textEditor) { return; }
 
         const selections = textEditor.selections;
 
-        let { value, step, formatter } = settings;
+        let { value, step, renderer } = state;
 
         if (typeof value === 'undefined') {
             return;
@@ -59,7 +60,7 @@ export class SequenceInserter {
             }
 
             for (let i = 0; i < selections.length; i++) {
-                const str = value.format(formatter);
+                const str = value.format(renderer);
                 builder.replace(selections[i], str);
                 value = value.next(step);
             }
@@ -67,18 +68,18 @@ export class SequenceInserter {
     }
 
     async processInsert(context: vscode.ExtensionContext) {
-        const val = await getInsertUserInput(undefined, this._settings);
+        const input = await getUserInput(undefined, this._settings);
 
-        let newSettings = await parseUserInput(val, this._settings);
+        let state = await parseUserInput(input, this._settings);
 
-        if (!newSettings) {
+        if (!state) {
             return;
         }
-        if (typeof val !== 'undefined') {
-            saveInputHistory(context, val);
+        if (typeof input !== 'undefined') {
+            saveInputHistory(context, input);
         }
 
-        await this.insertSequences(newSettings);
+        await this.insertSequences(state);
     }
 
     async processShortcut(context: vscode.ExtensionContext) {
@@ -98,9 +99,9 @@ export class SequenceInserter {
         });
 
         if (typeof pickedItem !== 'undefined') {
-            const newSettings = await shortcutToSettings(pickedItem.shortcut, this._settings);
-            if (newSettings) {
-                await this.insertSequences(newSettings);
+            const state = await shortcutToState(pickedItem.shortcut, this._settings);
+            if (state) {
+                await this.insertSequences(state);
             }
         }
     }
@@ -121,16 +122,16 @@ export class SequenceInserter {
 
         let _label: string | undefined = label;
         if (editClicked) {
-            _label = await getInsertUserInput(label, this._settings);
+            _label = await getUserInput(label, this._settings);
             if (typeof _label === 'undefined') {
                 return;
             }
         }
 
-        const newSettings = await parseUserInput(_label, this._settings);
-        if (typeof newSettings !== 'undefined') {
+        const state = await parseUserInput(_label, this._settings);
+        if (typeof state !== 'undefined') {
             if (typeof _label !== 'undefined') { saveInputHistory(context, _label); }
-            await this.insertSequences(newSettings);
+            await this.insertSequences(state);
         }
     }
 

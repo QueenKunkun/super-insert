@@ -1,3 +1,5 @@
+import { Plugin } from "@datadocs/rose-formatter";
+
 export const VAR_NOW = ['today', 'now'] as const;
 export const VAR_RANDOM = ['random', 'rand'] as const;
 
@@ -6,6 +8,7 @@ export type Start = typeof VAR_RANDOM[number] | typeof VAR_NOW | number | Date;
 export interface ITextRenderer {
     formatNumber(n: number): string;
     formatDate(n: Date): string;
+    setPlugin(plugin?: Plugin): void;
 }
 
 export interface ISequnce {
@@ -31,10 +34,10 @@ export interface IValue {
 
 export type IStep = number;
 
-export interface SequenceSetting {
+export interface InsertState {
     value: IValue,
     step: IStep, // seconds for Date
-    formatter: ITextRenderer,
+    renderer: ITextRenderer,
 }
 
 

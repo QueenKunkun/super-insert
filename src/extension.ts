@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { SequenceInserter } from './Inserter';
+import { SuperInserter } from './Inserter';
 import { InsertSettngs } from './InsertSettngs';
 import { registerSequences } from './BuiltInSequences';
 
@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "super-insert" is now active!');
 
 	let settings = new InsertSettngs();
-	let inserter = new SequenceInserter(settings);
+	let inserter = new SuperInserter(settings);
 
 	if (typeof settings.customSequences !== 'undefined') {
 		settings.customSequences.forEach(cs => {

@@ -42,7 +42,7 @@ So I created my own tool. It supports:
 
     ![Shortcuts](images/Shortcuts.gif)
 
-- Command: `Super insert: History` - Do the insertion from input history
+- Command: `Super insert: History` - Do the insertion from input history, allows editing before run.
 
     ![History](images/History.gif)
 
@@ -50,18 +50,18 @@ So I created my own tool. It supports:
 
 | Usage    | Input                                    | Example           | Output           | Notes                                                                                                                            |
 |----------|------------------------------------------|-------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| Numbers  | start:\<step\>:\<format\>                | 1:1:00#           | 001              | formats documented in the following sections                                                                                     |
+| Numbers  | \<start\>:\<step\>:\<format\>                | 1:1:00#           | 001              | formats documented in the following sections                                                                                     |
 |          |                                          | 1:00#             | 001              | Default step is 1                                                                                                                |
 |          |                                          | 1                 | 1                | Default step is 1                                                                                                                |
 |          |                                          |                   | 0                | Default start is 0, default step is 1                                                                                            |
-| Randoms  | (rand\|random):\<min\>:\<max\>:\<format\>| rand:1:100:#      | 32               | Generate random numbers between 1 and 100, output with format #                                                                  |
-|          |                                          | rand:1:100        | 32.0225189991755 | Generate random numbers between 1 and 100, output raw numbers                                                                    |
-|          |                                          | rand:100          | 32.0225189991755 | Generate random numbers between 0 and 100, output raw numbers                                                                    |
-|          |                                          | rand              | 0.225189991755   | Generate random numbers between 0 and 1, output raw numbers                                                                      |
-| Dates    | (now\|today):\<step\>:\<format\>         | now:1d:yyyy-mm-dd | 2025-09-19       | step can be numbers as seconds, or can be numbers with one of "dhms", e.g. d for days, h for hours, m for minutes, s for seconds |
+| Randoms  | (rand\|random):<br/>\<min\>:\<max\>:\<format\>| rand:1:100:#      | 32               | Generate random numbers between 1 and 100, output with format #                                                                  |
+|          |                                          | rand:1:100        | 32.0225... | Generate random numbers between 1 and 100, output raw numbers                                                                    |
+|          |                                          | rand:100          | 32.0225... | Generate random numbers between 0 and 100, output raw numbers                                                                    |
+|          |                                          | rand              | 0.225...   | Generate random numbers between 0 and 1, output raw numbers                                                                      |
+| Dates    | (now\|today):<br/>\<step\>:\<format\>         | now:1d:yyyy-mm-dd | 2025-09-19       | step can be numbers as seconds, or can be numbers with one of "dhms", e.g. d for days, h for hours, m for minutes, s for seconds |
 |          |                                          | now:yyyy-mm-dd    | 2025-09-19       | Default step is 1d                                                                                                               |
 |          |                                          | yyyy-mm-dd        | 2025-09-19       | Default step is 1d                                                                                                               |
-| Sequence | (one of the pre/custom-defined sequence item)   | Monday            | Monday Tuesday … | There are built-in sequences or user defined sequences                                                                           |
+| Sequence | (one of the <br/>pre- or custom-defined <br/>sequence item)   | Monday            | Monday Tuesday … | There are built-in sequences or user defined sequences                                                                           |
 
 ## Format
 
@@ -121,6 +121,36 @@ Counting time examples: e.g. how may hours or minutes for n dates, n is the inpu
 
 > Note: Some versions of Excel will output "#####..." for negative numbers with format "[h] m" and "[h] m s"
 
+### Conditional format
+
+Conditions can be specified in square brackets, like this: `[<comparator> <numberic constant>]<format>`, e.g. `[>3]#` (means value greater than 3 will be output as integer, that is 3.1 will be converted to "3", but 1.1 will remains "1.1"), which is called conditional format.
+
+A format can contain multiple conditional formats, seperated by semi-colon. e.g. `[>3]#;[<2]#.#;0.00` means value greater than 3 will use `#` format, less than 2 will use `#.#`, and others `0.00`.
+
+comparator listed below:
+
+| comparator | meaning                           | notes                  |
+|------------|-----------------------------------|------------------------|
+| <>         | not equal                         |                        |
+| <=         | less than or equal                |                        |
+| <          | less than                         |                        |
+| >=         | greater than or equal             |                        |
+| >          | greater than                      |                        |
+| =          | equal                             |                        |
+| %          | mod, 0 for false, others for true | not supported by excel |
+
+Example:
+
+| Original |                    |
+|----------|--------------------|
+|          | 1.5:0.5:[%1]#;#.#0 |
+| 1.5      | 1.50               |
+| 2        | 2                  |
+| 2.5      | 2.50               |
+| 3        | 3                  |
+| 3.5      | 3.50               |
+| 4        | 4                  |
+
 ### Some of the Date format
 
 | Symbol | Inerpretation                                                                                    |
@@ -178,15 +208,16 @@ Examples:
 
 All settings are under `superinsert` property.
 
-| Setting Key         | type                                                                                                                              | Description                                                                | default    |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|------------|
-| start               | number                                                                                                                            | Will be used when user inputs nothing                                      | 0          |
-| step                | number                                                                                                                            | Will be used when user does not input step for numbers                     | 1          |
-| defaultRandomFormat | string                                                                                                                            | Will be used when only input 'rand' or 'random'                            |            |
-| defaultDateFormat   | string                                                                                                                            | Will be used when only input 'now' or 'today'                              | yyyy-mm-dd |
-| defaultDateStep     | number or string                                                                                                                  | Will be used when the start is 'now' or 'today', number stands for seconds | 1d         |
-| customSequences     | {<br/> sequence?: string[],<br/> caseSensitive?: boolean <br/>}[]                                                                 | Will be used when user wants to input sequence                             |            |
-| shortcuts           | {<br/>    input?: string,<br/>    label?: string,<br/>    format?: string,<br/>    step?: number,<br/>    start?: number,<br/>}[] | Will be used when invoke the "Shortcut" command                            |
+| Setting Key         | type                                                                                                                                                       | Description                                                                                  | default    |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|------------|
+| start               | number                                                                                                                                                     | Will be used when user inputs nothing                                                        | 0          |
+| step                | number                                                                                                                                                     | Will be used when user does not input step for numbers                                       | 1          |
+| defaultRandomFormat | string                                                                                                                                                     | Will be used when only input 'rand' or 'random'                                              |            |
+| defaultDateFormat   | string                                                                                                                                                     | Will be used when only input 'now' or 'today'                                                | yyyy-mm-dd |
+| defaultDateStep     | number or string                                                                                                                                           | Will be used when the start is 'now' or 'today', number stands for seconds                   | 1d         |
+| defaultLocale       | "en-US" or "zh-CN"                                                                                                                                         | Will be used to control weekday and month name                                               |            |
+| customSequences     | {<br/> sequence?: string[],<br/> caseSensitive?: boolean <br/>}[]                                                                                          | Will be used when user wants to input sequence                                               |            |
+| shortcuts           | {<br/>    input?: string,<br/>    label?: string,<br/>    format?: string,<br/>    step?: number,<br/>    start?: number,<br/>    locale?: string,<br/>}[] | Will be used when invoke the "Shortcut" command. "locale" is used for weekday and month name |
 
 ### customSequences example
 
@@ -220,7 +251,8 @@ All settings are under `superinsert` property.
         },
         {
             "input": "dddd, dd of mmmm of yyyy",
-            "label": "date complex"
+            "label": "date complex",
+            "locale": "zh-CN"
         },
         {
             "input": "rand:1:100:#",

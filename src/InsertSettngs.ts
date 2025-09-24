@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { IInsertSettngs, IStep, Start } from './core';
 import { parseUserInput } from './parseInput';
 import { getSeconds } from './unit';
+import { getPlugin } from './TextRendererPlugins';
 
 export type Shortcut = {
     input?: string,
@@ -10,6 +11,7 @@ export type Shortcut = {
     format?: string,
     step?: number,
     start?: number,
+    locale?: string,
 }
 
 export function fitText(text: string, fitToLength: number = 15, fillWith = " "): string {
@@ -30,19 +32,35 @@ export function shortcutToDescription(shortcut: Shortcut) {
     return `${label}(${shortcut.input ?? ""})`;
 }
 
-export async function shortcutToSettings(shortcut: Shortcut, _settings: InsertSettngs) {
+export async function shortcutToState(shortcut: Shortcut, settings: InsertSettngs) {
     const { input, format, start, step } = shortcut;
-    if (typeof input !== 'undefined') { return await parseUserInput(input, _settings); }
 
-    const list = [];
+    let state;
 
-    if (typeof start !== 'undefined') { list.push(start); }
+    if (typeof input !== 'undefined') {
 
-    if (typeof step !== 'undefined') { list.push(step); }
+        state = await parseUserInput(input, settings);
 
-    if (typeof format !== 'undefined') { list.push(format); }
+    } else {
 
-    return await parseUserInput(list.join(':'), _settings);
+        const list = [];
+
+        if (typeof start !== 'undefined') { list.push(start); }
+
+        if (typeof step !== 'undefined') { list.push(step); }
+
+        if (typeof format !== 'undefined') { list.push(format); }
+
+        state = await parseUserInput(list.join(':'), settings);
+    }
+
+    const locale = shortcut.locale ?? settings.defaultLocale;
+
+    if (typeof state !== 'undefined' && typeof locale !== 'undefined') {
+        state.renderer.setPlugin(getPlugin(locale));
+    }
+
+    return state;
 }
 
 export function isValidShortcut(shortcut: Shortcut) {
@@ -70,6 +88,7 @@ export class InsertSettngs implements IInsertSettngs {
     public defaultRandomFormat: string | undefined;
     public defaultDateFormat: string | undefined;
     public defaultDateStep: IStep | undefined;
+    public defaultLocale: string | undefined;
 
     private _disposable: vscode.Disposable;
 
@@ -111,6 +130,7 @@ export class InsertSettngs implements IInsertSettngs {
         extractWithDefault("defaultFormat", "");
         extractWithDefault("defaultDateFormat", FORMAT_DEFAULT_DATE);
         extractWithDefault("defaultRandomFormat", undefined);
+        extractWithDefault("defaultLocale", undefined);
 
         const defaultDateStep = settings.get<string>("defaultDateStep");
         if (!defaultDateStep) {
@@ -130,7 +150,7 @@ export class InsertSettngs implements IInsertSettngs {
         extractWithDefault<CustomSequence[]>("customSequences", []);
     }
 
-    public dispose() {
+    dispose() {
         this._disposable.dispose();
     }
 }
