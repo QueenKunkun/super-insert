@@ -80,8 +80,5 @@
     "insert sequential numbers",
     "insert date and time",
     "excel-like format"
-  ],
-  "dependencies": {
-    "@datadocs/rose-formatter": "github:QueenKunkun/rose-formatter"
-  }
+  ]
 }
