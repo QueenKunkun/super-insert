@@ -137,7 +137,7 @@ comparator listed below:
 | >=         | greater than or equal             |                        |
 | >          | greater than                      |                        |
 | =          | equal                             |                        |
-| %          | mod, 0 for false, others for true | not supported by excel |
+| %          | mod, 0 for true, others for false | not supported by excel |
 
 Example:
 
