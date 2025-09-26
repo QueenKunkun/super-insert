@@ -1,5 +1,6 @@
 import { defineConfig } from '@vscode/test-cli';
 
 export default defineConfig({
-	files: 'out/test/**/*.test.js',
+	files: 'out/src/test/**/*.test.js',
+	srcDir: '.',
 });

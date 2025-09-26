@@ -1,4 +1,4 @@
-import { Plugin } from "../rose-formatter";
+import { Plugin } from "../rose-formatter/src";
 import { ISequnce, ITextRenderer } from "./core";
 
 export class SequenceRenderer implements ITextRenderer {

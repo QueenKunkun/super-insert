@@ -10,7 +10,7 @@ export function saveInputHistory(context: vscode.ExtensionContext, input: string
     }
     const idx = history.findIndex(x => x === input);
 
-    // if found, then at it to the last
+    // if found, then add it to the last
     if (idx > -1) {
         // already the last one, do nothing
         if (idx === history.length - 1) {

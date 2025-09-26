@@ -3,11 +3,10 @@ import { ISequnce, isNumber, IStep, parseNumber, InsertState } from "./core";
 import * as vscode from 'vscode';
 import { DateValue, isNow, isRandom, NumberValue, RandomValue } from "./Value";
 import { OriginalTextRenderer, SequenceRenderer } from "./TextRenderers";
-// import { TextRenderer } from "@datadocs/rose-formatter";
 import { getSeconds } from "./unit";
 import { FORMAT_DEFAULT_DATE, InsertSettngs } from "./InsertSettngs";
 import { getPlugin } from "./TextRendererPlugins";
-import { TextRenderer } from "../rose-formatter";
+import { TextRenderer } from "../rose-formatter/src";
 
 export async function parseUserInput(input: string | undefined, settings: InsertSettngs) {
 
@@ -47,7 +46,7 @@ export async function parseUserInput(input: string | undefined, settings: Insert
         const builtinFound = searchInBuiltInSequences(start);
         if (builtinFound.length > 0) {
             let seq = builtinFound[0];
-            if (builtinFound.length > 1) {
+            if (builtinFound.length > 1 && !settings._pickFirstOneWhenThereAreMoreThanOneCandidates) {
                 const foundItems = builtinFound.map((x, i) => ({ label: `${i}.${x}`, sequence: x }) as vscode.QuickPickItem & { sequence: ISequnce });
                 const pickedItem = await vscode.window.showQuickPick(foundItems, {
                     ignoreFocusOut: true,

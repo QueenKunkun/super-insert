@@ -1,4 +1,4 @@
-import { IInsertSettngs, ITextRenderer, IValue, Start, VAR_NOW, VAR_RANDOM } from "./core";
+import { ITextRenderer, IValue, VAR_NOW, VAR_RANDOM } from "./core";
 
 export class NumberValue implements IValue {
     constructor(public value: number) { }
@@ -58,24 +58,4 @@ export function isNow(value: any) {
 
 export function isRandom(value: any) {
     return VAR_RANDOM.includes(value);
-}
-
-export function createValue(settings: IInsertSettngs, options?: any) {
-    const { start } = settings;
-
-    if (typeof start === 'number') {
-        return new NumberValue(start);
-    }
-
-    if (start instanceof Date) {
-        return new DateValue(start);
-    }
-
-    if (isNow(start)) {
-        return new DateValue(new Date());
-    }
-
-    if (isRandom(start)) {
-        return new RandomValue(options.min, options.max);
-    }
 }

@@ -97,7 +97,7 @@ Exampes:
 
 | Original | Thousand and Percent |          |           | As Literal         |        | Scientific |          |         | Literals |           |        |
 |----------|----------------------|----------|-----------|--------------------|--------|------------|----------|---------|----------|-----------|--------|
-|          | #,k                  | #.#%     | #,0.#%    | ,#.#-,<br/>,,#.#-, | \%#.#  | 0.00E+00   | 0.00E+00 | ##.#E-0 | #\-#.#   | #"abc"#.# | #中#.#  |
+|          | #,k                  | #.#%     | #,0.#%    | ,#.#-,<br/>,,#.#-, | \%#.#  | 0.00E+00   | 0.00E-0  | ##.#E-0 | #\-#.#   | #"abc"#.# | #中#.#  |
 | 4000     | 4k                   | 400000.% | 400,000.% | ,4000.-,           | %4000. | 4.00E+3    | 4.00E3   | 40.E2   | 400-0.   | 400abc0.  | 400中0. |
 | -8.8     | -k                   | -880.%   | -880.%    | -,8.8-,            | -%8.8  | -8.80E+0   | -8.80E0  | -8.8E0  | --8.8    | -abc8.8   | -中8.8  |
 | -5.6     | -k                   | -560.%   | -560.%    | -,5.6-,            | -%5.6  | -5.60E+0   | -5.60E0  | -5.6E0  | --5.6    | -abc5.6   | -中5.6  |
@@ -272,11 +272,14 @@ All settings are under `superinsert` property.
 
 This project depends on a [fork repo](https://github.com/QueenKunkun/super-insert.git) of [datadocs/rose-formatter](https://github.com/datadocs/rose-formatter), for customizations.
 
-So I added it as a submodule, to correctly build it, you need to clone and build the submodule as well.
+So I added the [fork repo](https://github.com/QueenKunkun/super-insert.git) as submodule, to correctly build it, you need to clone and build the submodule as well.
+
+Below is the example steps:
 
 ```bash
 git clone --recurse-submodules https://github.com/QueenKunkun/super-insert.git
 cd super-insert
+
 # build the submodule first
 cd rose-formatter
 npm i
@@ -288,7 +291,38 @@ npm i
 npm run package # or debug directly, more information please see vscode's development guide
 ```
 
+### Debug tests
+
+There are rare cases you want to debug tests, e.g. changing test infrastructures causes no tests to run etc.
+
+To debug tests, it needs some configurations.
+
+`launch.json` example, note: `VSCODE_TEST_OPTIONS` is a must env (found after debugging from package.json, maybe there are better ways, e.g. create a custom runner, I will leave with it for now)
+
+```json
+{
+    "name": "Extension Tests",
+    "type": "extensionHost",
+    "request": "launch",
+    "runtimeExecutable": "${execPath}",
+    "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=/Users/apple/code/kk/github/super-insert/node_modules/@vscode/test-cli/out/runner.cjs"
+    ],
+    "outFiles": [
+        "${workspaceFolder}/out/src/test/**/*.js"
+    ],
+    "env": {
+        "VSCODE_TEST_OPTIONS": "{\"mochaOpts\":{\"_\":[\"/Users/apple/.nvm/versions/node/v22.14.0/bin/node\",\"/Users/apple/code/kk/github/super-insert/node_modules/.bin/vscode-test\"],\"config\":\"nearest .vscode-test.js\",\"skip-extension-dependencies\":false,\"skipExtensionDependencies\":false,\"jobs\":19,\"j\":19,\"slow\":75,\"s\":75,\"timeout\":2000,\"t\":2000,\"diff\":true,\"reporter\":\"spec\",\"R\":\"spec\",\"$0\":\"/Users/apple/code/kk/github/super-insert/node_modules/.bin/vscode-test\"},\"colorDefault\":{\"level\":3,\"hasBasic\":true,\"has256\":true,\"has16m\":true},\"preload\":[],\"files\":[\"/Users/apple/code/kk/github/super-insert/out/src/test/parser.test.js\"]}"
+    }
+}
+```
+
+> Note: Before debug, run `npm run compile-tests` or automatically compile tests by `npm run watch-tests`, to make test code updated.
+
 ## Thanks
+
+Inspired from or made use of these projects:
 
 - [Inori/vscode-InsertNumbers: Insert Numbers extension for vscode](https://github.com/Inori/vscode-InsertNumbers)
 - [datadocs/rose-formatter: A port of Excel's numerical formatting...](https://github.com/datadocs/rose-formatter )

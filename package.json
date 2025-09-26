@@ -55,10 +55,11 @@
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
+    "compile-tests": "npm run copy-rose-renderer && tsc -p . --outDir out",
+    "watch-tests": "npm run copy-rose-renderer && tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
+    "copy-rose-renderer": "shx mkdir -p out/rose-formatter/src/ && shx cp -r rose-formatter/src/parse-format.js out/rose-formatter/src/",
     "test": "vscode-test"
   },
   "devDependencies": {
@@ -70,6 +71,7 @@
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.34.0",
+    "shx": "^0.4.0",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.2",
     "webpack": "^5.101.3",

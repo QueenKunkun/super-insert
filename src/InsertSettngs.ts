@@ -90,6 +90,11 @@ export class InsertSettngs implements IInsertSettngs {
     public defaultDateStep: IStep | undefined;
     public defaultLocale: string | undefined;
 
+    /**
+     * This is for writing test only
+     */
+    public _pickFirstOneWhenThereAreMoreThanOneCandidates: boolean = false;
+
     private _disposable: vscode.Disposable;
 
     constructor() {

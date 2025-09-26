@@ -1,4 +1,3 @@
-// import { Plugin } from "@datadocs/rose-formatter";
 import { Plugin } from "../rose-formatter";
 
 export const VAR_NOW = ['today', 'now'] as const;

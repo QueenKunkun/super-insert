@@ -36,12 +36,8 @@ export class SuperInserter {
         this._settings = settings;
     }
 
-    private insertSequences(state: InsertState) {
-
-        let textEditor = vscode.window.activeTextEditor;
-        if (!textEditor) { return; }
-
-        const selections = textEditor.selections;
+    // make public for testing only
+    public *generateSequences(state: InsertState, count?: number) {
 
         let { value, step, renderer } = state;
 
@@ -53,16 +49,36 @@ export class SuperInserter {
             step = 1;
         }
 
-        textEditor.edit(function (builder) {
+        if (typeof value === 'undefined') {
+            return;
+        }
 
-            if (typeof value === 'undefined') {
-                return;
-            }
+        const condition = typeof count === 'number' ? (i: number) => i < count : (i: number) => true;
+
+        for (let i = 0; condition(i); i++) {
+            const str = value.format(renderer);
+            yield str;
+            value = value.next(step);
+        }
+    }
+
+    private insertSequences(state: InsertState) {
+
+        let textEditor = vscode.window.activeTextEditor;
+        if (!textEditor) { return; }
+
+        const that = this;
+
+        const selections = textEditor.selections;
+
+        textEditor.edit(function (builder) {
+            const it = that.generateSequences(state);
 
             for (let i = 0; i < selections.length; i++) {
-                const str = value.format(renderer);
-                builder.replace(selections[i], str);
-                value = value.next(step);
+                const { done, value } = it.next();
+                if (!done) {
+                    builder.replace(selections[i], value);
+                }
             }
         });
     }
@@ -70,13 +86,14 @@ export class SuperInserter {
     async processInsert(context: vscode.ExtensionContext) {
         const input = await getUserInput(undefined, this._settings);
 
+        if (typeof input !== 'undefined') {
+            saveInputHistory(context, input);
+        }
+
         let state = await parseUserInput(input, this._settings);
 
         if (!state) {
             return;
-        }
-        if (typeof input !== 'undefined') {
-            saveInputHistory(context, input);
         }
 
         await this.insertSequences(state);
@@ -128,9 +145,10 @@ export class SuperInserter {
             }
         }
 
+        if (typeof _label !== 'undefined') { saveInputHistory(context, _label); }
+
         const state = await parseUserInput(_label, this._settings);
         if (typeof state !== 'undefined') {
-            if (typeof _label !== 'undefined') { saveInputHistory(context, _label); }
             await this.insertSequences(state);
         }
     }
