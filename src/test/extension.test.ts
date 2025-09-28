@@ -173,7 +173,7 @@ function collectResults(it: Iterator<string>, count: number) {
  * @param settings 
  * @param userInput 
  * @param expected 
- * @param assertResult 
+ * @param assertResult compare results or log out test code examples
  */
 async function generateSequences(settings: InsertSettngs, userInput: string, expected: string[], assertResult: boolean) {
 	const state = await parseUserInput(userInput, settings);
