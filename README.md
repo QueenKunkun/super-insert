@@ -1,5 +1,27 @@
 # README
 
+- [README](#readme)
+  - [Super Insert for Visual Studio Code](#super-insert-for-visual-studio-code)
+  - [Why another `insert numbers` extension?](#why-another-insert-numbers-extension)
+  - [Usage](#usage)
+    - [Command: `Super insert`](#command-super-insert)
+    - [Command: `Super insert: Shortcut`](#command-super-insert-shortcut)
+    - [Command: `Super insert: History`](#command-super-insert-history)
+  - [Input](#input)
+  - [Format](#format)
+    - [Some of the Number format](#some-of-the-number-format)
+    - [Conditional format](#conditional-format)
+    - [Some of the Date format](#some-of-the-date-format)
+    - [Pre-defined sequences](#pre-defined-sequences)
+  - [Settings](#settings)
+    - [customSequences example](#customsequences-example)
+    - [shortcuts example](#shortcuts-example)
+  - [Development](#development)
+    - [Build](#build)
+    - [Debug tests](#debug-tests)
+  - [Thanks](#thanks)
+  - [For more information or bug reports](#for-more-information-or-bug-reports)
+
 ## Super Insert for Visual Studio Code
 
 An extension to insert sequences, numbers or dates.
@@ -19,32 +41,40 @@ So I created my own tool. It supports:
 
 ## Usage
 
-- Command: `Super insert` - Insert sequences, numbers or dates
-  - Keybindings: `(ctrl|cmd)+alt+n`
-  - Basic numbers
+### Command: `Super insert`
 
-    ![Numbers](images/Basic.gif)
-  - Decimals/Fraction numbers
+Insert sequences, numbers or dates
 
-    ![Numbers](images/Decimals.gif)
-  - Random numbers
+- Keybindings: `(ctrl|cmd)+alt+n`
+- Basic numbers
 
-    ![Random numbers](images/Randoms.gif)
-  - Dates
+  ![Numbers](images/Basic.gif)
+- Decimals/Fraction numbers
 
-    ![Dates](images/Dates.gif)
-  - Sequences
+  ![Numbers](images/Decimals.gif)
+- Random numbers
 
-    ![Sequences](images/Sequences.gif)
+  ![Random numbers](images/Randoms.gif)
+- Dates
 
-- Command: `Super insert: Shortcut` - Do the insertion with predefined shortcuts
-  - Keybindings: `(ctrl|cmd)+alt+y`
+  ![Dates](images/Dates.gif)
+- Sequences
 
-    ![Shortcuts](images/Shortcuts.gif)
+  ![Sequences](images/Sequences.gif)
 
-- Command: `Super insert: History` - Do the insertion from input history, allows editing before run.
+### Command: `Super insert: Shortcut`
 
-    ![History](images/History.gif)
+Do the insertion with predefined shortcuts
+
+- Keybindings: `(ctrl|cmd)+alt+y`
+
+  ![Shortcuts](images/Shortcuts.gif)
+
+### Command: `Super insert: History`
+
+Do the insertion from input history, allows editing before run
+
+![History](images/History.gif)
 
 ## Input
 
