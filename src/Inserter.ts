@@ -39,7 +39,7 @@ export class SuperInserter {
     // make public for testing only
     public *generateSequences(state: InsertState, count?: number) {
 
-        let { value, step, renderer } = state;
+        let { value, step, renderer, prefix, suffix } = state;
 
         if (typeof value === 'undefined') {
             return;
@@ -56,7 +56,15 @@ export class SuperInserter {
         const condition = typeof count === 'number' ? (i: number) => i < count : (i: number) => true;
 
         for (let i = 0; condition(i); i++) {
-            const str = value.format(renderer);
+            let str = value.format(renderer);
+
+            if (prefix) {
+                str = prefix + str;
+            }
+            if (suffix) {
+                str = str + suffix;
+            }
+
             yield str;
             value = value.next(step);
         }

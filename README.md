@@ -3,6 +3,7 @@
 - [README](#readme)
   - [Super Insert for Visual Studio Code](#super-insert-for-visual-studio-code)
   - [Why another `insert numbers` extension?](#why-another-insert-numbers-extension)
+  - [Installation](#installation)
   - [Usage](#usage)
     - [Command: `Super insert`](#command-super-insert)
     - [Command: `Super insert: Shortcut`](#command-super-insert-shortcut)
@@ -16,6 +17,8 @@
   - [Settings](#settings)
     - [customSequences example](#customsequences-example)
     - [shortcuts example](#shortcuts-example)
+  - [Trouble Shooting](#trouble-shooting)
+    - [Nothing output with some formats](#nothing-output-with-some-formats)
   - [Development](#development)
     - [Build](#build)
     - [Debug tests](#debug-tests)
@@ -38,6 +41,10 @@ So I created my own tool. It supports:
 - Add custom sequences by only configuring with vscode settings
 - Random numbers
 - Dates
+
+## Installation
+
+Search "Super Insert" in vscode Extensions pane or access and download from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=KristinZhang.super-insert )
 
 ## Usage
 
@@ -295,6 +302,24 @@ All settings are under `superinsert` property.
     ],
 }
 ```
+
+## Trouble Shooting
+
+### Nothing output with some formats
+
+Sometimes there is nothing output, you can open OUTPUT panel, and select "Extension Host", there should be some error information, follow it to fix your format.
+
+![Output of extension](images/ExtensionOutput.png)
+
+Examples:
+
+| input | error | description | fix         | output |
+|-------|-------|-------------|-------------|--------|
+| `[hh\:mm\:ss]` | SyntaxError: Expected "<", "<=", "<>", ">=", "h", "m", "s", or [%=->] but "y" found. | square brackets indicates condition of conditional format, so it is expected to be a comparer at the start | use backslash to escape `square brackets` to be normal "text" like this: `\[hh\:mm\:ss\]` | `[13:17:15]` |
+
+NOTE:
+
+- `\n` is not support in prompt input, but supported in `shortcut` mode.
 
 ## Development
 

@@ -38,6 +38,8 @@ export interface InsertState {
     value: IValue,
     step: IStep, // seconds for Date
     renderer: ITextRenderer,
+    prefix?: string,
+    suffix?: string,
 }
 
 

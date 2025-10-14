@@ -8,15 +8,37 @@ import { FORMAT_DEFAULT_DATE, InsertSettngs } from "./InsertSettngs";
 import { getPlugin } from "./TextRendererPlugins";
 import { TextRenderer } from "../rose-formatter/src";
 
+function extractAffixes(format: string): [string | undefined, string, string | undefined] {
+    let prefix: string | undefined = undefined;
+    let suffix: string | undefined = undefined;
+
+    let fmt = format;
+
+    const prefixMatch = format.match(/^\s*(\\.)+\s*/);
+    if (prefixMatch) {
+        prefix = prefixMatch[0].replace(/\\/g, '');
+        fmt = fmt.substring(prefixMatch[0].length);
+    }
+
+    const suffixMatch = format.match(/\s*(\\.)+\s*$/);
+    if (suffixMatch) {
+        suffix = suffixMatch[0].replace(/\\/g, '');
+        fmt = fmt.substring(0, fmt.length - suffixMatch[0].length);
+    }
+
+    return [prefix, fmt, suffix];
+}
+
 export async function parseUserInput(input: string | undefined, settings: InsertSettngs) {
 
     if (typeof input === 'undefined') {
         return undefined;
     }
 
-    const newRenderer = (format:string) => {
+    const setRenderer = (state: InsertState, format: string) => {
         const locale = settings.defaultLocale;
-        return new TextRenderer(format, getPlugin(locale));
+        [state.prefix, format, state.suffix] = extractAffixes(format);
+        state.renderer = new TextRenderer(format, getPlugin(locale));
     }
 
     const defaultStart = settings?.getDefaultStart();
@@ -85,10 +107,10 @@ export async function parseUserInput(input: string | undefined, settings: Insert
                 let format: string | undefined = rest.find(x => !isNumber(x));
                 if (typeof format === 'undefined') {
                     if (typeof settings?.defaultRandomFormat !== 'undefined') {
-                        state.renderer = newRenderer(settings?.defaultRandomFormat);
+                        setRenderer(state, settings?.defaultRandomFormat);
                     }
                 } else {
-                    state.renderer = newRenderer(format);
+                    setRenderer(state, format);
                 }
 
                 state.value = new RandomValue(min, max);
@@ -112,12 +134,13 @@ export async function parseUserInput(input: string | undefined, settings: Insert
                     format = settings?.defaultDateFormat ?? FORMAT_DEFAULT_DATE;
                 }
 
-                state.renderer = newRenderer(format);
-            } else {
-                // e.g. [yyyy-MM-dd hh\:mm\:ss]
-                state.renderer = newRenderer(start);
-                state.step = defaultDateStep;
+                setRenderer(state, format);
+                return state;
             }
+
+            // e.g. [yyyy-MM-dd hh\:mm\:ss]
+            setRenderer(state, start);
+            state.step = defaultDateStep;
             return state;
         }
     } else {
@@ -128,11 +151,11 @@ export async function parseUserInput(input: string | undefined, settings: Insert
     let _step: IStep | undefined;
     if (typeof step !== 'undefined') { _step = parseNumber(step); }
 
-    if (typeof format !== 'undefined') { state.renderer = newRenderer(format); }
+    if (typeof format !== 'undefined') { setRenderer(state, format); }
 
     if (typeof _step === 'undefined' || isNaN(_step)) {
         if (typeof format === 'undefined' && typeof step === 'string') {
-            state.renderer = newRenderer(step);
+            setRenderer(state, step);
         }
         state.step = defaultStep;
     } else {
@@ -141,3 +164,4 @@ export async function parseUserInput(input: string | undefined, settings: Insert
 
     return state;
 }
+
