@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.7
+
+- Modify icon
+
 ## 0.0.6
 
 - Fix bug: separates prefix from format to solve some non-op problems
