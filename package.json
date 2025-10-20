@@ -11,7 +11,7 @@
     "url": "https://github.com/QueenKunkun/super-insert/issues",
     "email": "742711819@qq.com"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "engines": {
     "vscode": "^1.1.0"
   },
@@ -19,6 +19,7 @@
     "Other"
   ],
   "activationEvents": [],
+  "icon": "images/super-insert-icon.png",
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -60,7 +61,8 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src",
     "copy-rose-renderer": "shx mkdir -p out/rose-formatter/src/ && shx cp -r rose-formatter/src/parse-format.js out/rose-formatter/src/",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "publish": "vsce publish"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
