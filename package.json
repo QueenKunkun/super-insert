@@ -62,7 +62,9 @@
     "lint": "eslint src",
     "copy-rose-renderer": "shx mkdir -p out/rose-formatter/src/ && shx cp -r rose-formatter/src/parse-format.js out/rose-formatter/src/",
     "test": "vscode-test",
-    "publish": "vsce package && vsce publish"
+    "publish": "npm run publish-vsce && npm run publish-ovsx",
+    "publish-vsce": "vsce package && vsce publish",
+    "publish-ovsx": "source .env && npx ovsx publish -p $vsx_token"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
