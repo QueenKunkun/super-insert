@@ -47,7 +47,7 @@ const ANY_NUMBER_REGEX = /^NaN|-?((\d*\.\d+|\d+)([Ee][+-]?\d+)?|Infinity)$/;
 const NUMBER_REGEX = /^-?(\d*\.\d+|\d+)([Ee][+-]?\d+)?$/;
 
 export function isNumber(x: string | undefined): x is string {
-    if (typeof x !== 'undefined') { return NUMBER_REGEX.test(x); }
+    if (x !== undefined) { return NUMBER_REGEX.test(x); }
     return false;
 }
 

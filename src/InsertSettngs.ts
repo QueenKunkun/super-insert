@@ -37,7 +37,7 @@ export async function shortcutToState(shortcut: Shortcut, settings: InsertSettng
 
     let state;
 
-    if (typeof input !== 'undefined') {
+    if (input !== undefined) {
 
         state = await parseUserInput(input, settings);
 
@@ -45,18 +45,18 @@ export async function shortcutToState(shortcut: Shortcut, settings: InsertSettng
 
         const list = [];
 
-        if (typeof start !== 'undefined') { list.push(start); }
+        if (start !== undefined) { list.push(start); }
 
-        if (typeof step !== 'undefined') { list.push(step); }
+        if (step !== undefined) { list.push(step); }
 
-        if (typeof format !== 'undefined') { list.push(format); }
+        if (format !== undefined) { list.push(format); }
 
         state = await parseUserInput(list.join(':'), settings);
     }
 
     const locale = shortcut.locale ?? settings.defaultLocale;
 
-    if (typeof state !== 'undefined' && typeof locale !== 'undefined') {
+    if (state !== undefined && locale !== undefined) {
         state.renderer.setPlugin(getPlugin(locale));
     }
 

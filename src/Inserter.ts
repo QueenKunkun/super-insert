@@ -94,7 +94,7 @@ export class SuperInserter {
     async processInsert(context: vscode.ExtensionContext) {
         const input = await getUserInput(undefined, this._settings);
 
-        if (typeof input !== 'undefined') {
+        if (input !== undefined) {
             saveInputHistory(context, input);
         }
 
@@ -123,7 +123,7 @@ export class SuperInserter {
             title: 'Pick a shortcut input that createed via vscode user settings',
         });
 
-        if (typeof pickedItem !== 'undefined') {
+        if (pickedItem !== undefined) {
             const state = await shortcutToState(pickedItem.shortcut, this._settings);
             if (state) {
                 await this.insertSequences(state);
@@ -153,10 +153,10 @@ export class SuperInserter {
             }
         }
 
-        if (typeof _label !== 'undefined') { saveInputHistory(context, _label); }
+        if (_label !== undefined) { saveInputHistory(context, _label); }
 
         const state = await parseUserInput(_label, this._settings);
-        if (typeof state !== 'undefined') {
+        if (state !== undefined) {
             await this.insertSequences(state);
         }
     }

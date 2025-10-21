@@ -149,9 +149,9 @@ export async function parseUserInput(input: string | undefined, settings: Insert
 
     let [step, format] = rest;
     let _step: IStep | undefined;
-    if (typeof step !== 'undefined') { _step = parseNumber(step); }
+    if (step !== undefined) { _step = parseNumber(step); }
 
-    if (typeof format !== 'undefined') { setRenderer(state, format); }
+    if (format !== undefined) { setRenderer(state, format); }
 
     if (typeof _step === 'undefined' || isNaN(_step)) {
         if (typeof format === 'undefined' && typeof step === 'string') {
