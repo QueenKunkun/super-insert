@@ -37,10 +37,10 @@ Furthermore, those extensions is not easy to extend, especially If I only want t
 
 So I created my own tool. It supports:
 
-- Excel-like format
-- Add custom sequences by only configuring with vscode settings
-- Random numbers
-- Dates
+* Excel-like format
+* Add custom sequences by only configuring with vscode settings
+* Random numbers
+* Dates
 
 ## Installation
 
@@ -52,20 +52,20 @@ Search "Super Insert" in vscode Extensions pane or access and download from [Vis
 
 Insert sequences, numbers or dates
 
-- Keybindings: `(ctrl|cmd)+alt+n`
-- Basic numbers
+* Keybindings: `(ctrl|cmd)+alt+n`
+* Basic numbers
 
   ![Numbers](images/Basic.gif)
-- Decimals/Fraction numbers
+* Decimals/Fraction numbers
 
   ![Numbers](images/Decimals.gif)
-- Random numbers
+* Random numbers
 
   ![Random numbers](images/Randoms.gif)
-- Dates
+* Dates
 
   ![Dates](images/Dates.gif)
-- Sequences
+* Sequences
 
   ![Sequences](images/Sequences.gif)
 
@@ -73,7 +73,7 @@ Insert sequences, numbers or dates
 
 Do the insertion with predefined shortcuts
 
-- Keybindings: `(ctrl|cmd)+alt+y`
+* Keybindings: `(ctrl|cmd)+alt+y`
 
   ![Shortcuts](images/Shortcuts.gif)
 
@@ -319,7 +319,7 @@ Examples:
 
 NOTE:
 
-- `\n` is not support in prompt input, but supported in `shortcut` mode.
+* `\n` is not support in prompt input, but supported in `shortcut` mode.
 
 ## Development
 
@@ -379,9 +379,9 @@ To debug tests, it needs some configurations.
 
 Inspired from or made use of these projects:
 
-- [Inori/vscode-InsertNumbers: Insert Numbers extension for vscode](https://github.com/Inori/vscode-InsertNumbers)
-- [datadocs/rose-formatter: A port of Excel's numerical formatting...](https://github.com/datadocs/rose-formatter )
+* [Inori/vscode-InsertNumbers: Insert Numbers extension for vscode](https://github.com/Inori/vscode-InsertNumbers)
+* [datadocs/rose-formatter: A port of Excel's numerical formatting...](https://github.com/datadocs/rose-formatter )
 
 ## For more information or bug reports
 
-- [GitHub](https://github.com/QueenKunkun/super-insert)
+* [GitHub](https://github.com/QueenKunkun/super-insert)
