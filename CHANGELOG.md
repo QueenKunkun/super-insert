@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.8
+
+- Support uuid
+
 ## 0.0.7
 
 - Modify icon
