@@ -9,7 +9,7 @@ const REGEX_FACTORS = [
 ];
 
 export function getSeconds(unit: string): [boolean, number | undefined] {
-    if (typeof unit === 'undefined') {
+    if (unit === undefined) {
         return [false, undefined];
     }
 

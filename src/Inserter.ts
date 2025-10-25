@@ -41,15 +41,15 @@ export class SuperInserter {
 
         let { value, step, renderer, prefix, suffix } = state;
 
-        if (typeof value === 'undefined') {
+        if (value === undefined) {
             return;
         }
 
-        if (typeof step === 'undefined') {
+        if (step === undefined) {
             step = 1;
         }
 
-        if (typeof value === 'undefined') {
+        if (value === undefined) {
             return;
         }
 
@@ -109,7 +109,7 @@ export class SuperInserter {
 
     async processShortcut(context: vscode.ExtensionContext) {
         const avaiableShortcuts = this._settings.shortcuts?.filter(isValidShortcut);
-        if (typeof avaiableShortcuts === 'undefined') {
+        if (avaiableShortcuts === undefined) {
             return;
         }
 
@@ -133,7 +133,7 @@ export class SuperInserter {
 
     async processHistory(context: vscode.ExtensionContext) {
         const history = getInputHistory(context);
-        if (typeof history === 'undefined') { return; }
+        if (history === undefined) { return; }
         const pickedItems = await createQuickPick({ items: history.reverse(), title: "pick a history", clickItemToEdit: true });
         if (!pickedItems || pickedItems.length === 0) { return; }
         const pickedItem = pickedItems[0];
@@ -148,7 +148,7 @@ export class SuperInserter {
         let _label: string | undefined = label;
         if (editClicked) {
             _label = await getUserInput(label, this._settings);
-            if (typeof _label === 'undefined') {
+            if (_label === undefined) {
                 return;
             }
         }

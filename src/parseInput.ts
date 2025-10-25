@@ -1,7 +1,7 @@
 import { searchInBuiltInSequences } from "./BuiltInSequences";
 import { ISequnce, isNumber, IStep, parseNumber, InsertState } from "./core";
 import * as vscode from 'vscode';
-import { DateValue, isNow, isRandom, NumberValue, RandomValue } from "./Value";
+import { DateValue, isNow, isRandom, isUUID, NumberValue, RandomValue, UUIDValue } from "./Value";
 import { OriginalTextRenderer, SequenceRenderer } from "./TextRenderers";
 import { getSeconds } from "./unit";
 import { FORMAT_DEFAULT_DATE, InsertSettngs } from "./InsertSettngs";
@@ -31,7 +31,7 @@ function extractAffixes(format: string): [string | undefined, string, string | u
 
 export async function parseUserInput(input: string | undefined, settings: InsertSettngs) {
 
-    if (typeof input === 'undefined') {
+    if (input === undefined) {
         return undefined;
     }
 
@@ -62,7 +62,7 @@ export async function parseUserInput(input: string | undefined, settings: Insert
 
     let _start = parseNumber(start);
 
-    if (typeof _start === 'undefined' || isNaN(_start)) {
+    if (_start === undefined || isNaN(_start)) {
 
         // check if `start` is an item in some sequence or not
         const builtinFound = searchInBuiltInSequences(start);
@@ -75,7 +75,7 @@ export async function parseUserInput(input: string | undefined, settings: Insert
                     matchOnDescription: true,
                     title: 'found more than one built-in sequence matches, please pick one',
                 });
-                if (typeof pickedItem === 'undefined') {
+                if (pickedItem === undefined) {
                     return;
                 }
                 seq = pickedItem.sequence;
@@ -91,21 +91,21 @@ export async function parseUserInput(input: string | undefined, settings: Insert
 
                 // e.g. []
                 let [min, max] = rest.map(x => parseNumber(x));
-                if (typeof max === 'undefined') {
+                if (max === undefined) {
                     max = min;
                     min = 0;
                 }
 
-                if (typeof max === 'undefined') {
+                if (max === undefined) {
                     max = 1;
                 }
 
-                if (typeof min === 'undefined') {
+                if (min === undefined) {
                     min = 0;
                 }
 
                 let format: string | undefined = rest.find(x => !isNumber(x));
-                if (typeof format === 'undefined') {
+                if (format === undefined) {
                     if (typeof settings?.defaultRandomFormat !== 'undefined') {
                         setRenderer(state, settings?.defaultRandomFormat);
                     }
@@ -114,6 +114,26 @@ export async function parseUserInput(input: string | undefined, settings: Insert
                 }
 
                 state.value = new RandomValue(min, max);
+                return state;
+            }
+
+            if (isUUID(start)) {
+
+                let [format] = rest;
+
+                const opts = { upperCase: false, withBrackets: false };
+
+                if (format !== undefined) {
+                    if (format.includes("{") || format.includes("}")) {
+                        opts.withBrackets = true;
+                    }
+                    if (format.includes("u") || format.includes("U")) {
+                        opts.upperCase = true;
+                    }
+                }
+
+                // uuid don't need a text renderer
+                state.value = new UUIDValue(opts);
                 return state;
             }
 
@@ -153,8 +173,8 @@ export async function parseUserInput(input: string | undefined, settings: Insert
 
     if (format !== undefined) { setRenderer(state, format); }
 
-    if (typeof _step === 'undefined' || isNaN(_step)) {
-        if (typeof format === 'undefined' && typeof step === 'string') {
+    if (_step === undefined || isNaN(_step)) {
+        if (format === undefined && typeof step === 'string') {
             setRenderer(state, step);
         }
         state.step = defaultStep;

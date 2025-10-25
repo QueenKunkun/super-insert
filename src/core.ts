@@ -2,8 +2,9 @@ import { Plugin } from "../rose-formatter";
 
 export const VAR_NOW = ['today', 'now'] as const;
 export const VAR_RANDOM = ['random', 'rand'] as const;
+export const VAR_UUID = ['uuid', 'guid'] as const;
 
-export type Start = typeof VAR_RANDOM[number] | typeof VAR_NOW | number | Date;
+export type Start = typeof VAR_RANDOM[number] | typeof VAR_NOW[number] | typeof VAR_UUID[number] | number | Date;
 
 export interface ITextRenderer {
     formatNumber(n: number): string;

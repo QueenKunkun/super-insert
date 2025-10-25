@@ -27,7 +27,7 @@
 
 ## Super Insert for Visual Studio Code
 
-An extension to insert sequences, numbers or dates.
+An extension to insert sequences, numbers, uuids or dates.
 
 ## Why another `insert numbers` extension?
 
@@ -95,9 +95,10 @@ Do the insertion from input history, allows editing before run
 |          |                                          | rand:1:100        | 32.0225... | Generate random numbers between 1 and 100, output raw numbers                                                                    |
 |          |                                          | rand:100          | 32.0225... | Generate random numbers between 0 and 100, output raw numbers                                                                    |
 |          |                                          | rand              | 0.225...   | Generate random numbers between 0 and 1, output raw numbers                                                                      |
-| Dates    | (now\|today):<br/>\<step\>:\<format\>         | now:1d:yyyy-mm-dd | 2025-09-19       | step can be numbers as seconds, or can be numbers with one of "dhms", e.g. d for days, h for hours, m for minutes, s for seconds |
+| Dates    | (now\|today):<br/>\<step\>:\<format\>    | now:1d:yyyy-mm-dd | 2025-09-19       | step can be numbers as seconds, or can be numbers with one of "dhms", e.g. d for days, h for hours, m for minutes, s for seconds |
 |          |                                          | now:yyyy-mm-dd    | 2025-09-19       | Default step is 1d                                                                                                               |
 |          |                                          | yyyy-mm-dd        | 2025-09-19       | Default step is 1d                                                                                                               |
+| UUID     | uuid:\<format\>                          | uuid:u            | BAA60E3D-CF21... | u or U stands for upper case, default is lower case, { or } will force to add brackets around                 |
 | Sequence | (one of the <br/>pre- or custom-defined <br/>sequence item)   | Monday            | Monday Tuesday … | There are built-in sequences or user defined sequences                                                                           |
 
 ## Format

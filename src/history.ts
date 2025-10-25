@@ -5,7 +5,7 @@ const KEY_HISTORY = "history";
 
 export function saveInputHistory(context: vscode.ExtensionContext, input: string) {
     let history = context.globalState.get<string[]>(KEY_HISTORY);
-    if (typeof history === 'undefined') {
+    if (history === undefined) {
         history = [];
     }
     const idx = history.findIndex(x => x === input);
@@ -26,7 +26,7 @@ export function saveInputHistory(context: vscode.ExtensionContext, input: string
 
 export function getInputHistory(context: vscode.ExtensionContext) {
     let history = context.globalState.get<string[]>(KEY_HISTORY);
-    if (typeof history === 'undefined') {
+    if (history === undefined) {
         history = [];
     }
     return history;

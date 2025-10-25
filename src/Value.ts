@@ -1,4 +1,4 @@
-import { ITextRenderer, IValue, VAR_NOW, VAR_RANDOM } from "./core";
+import { ITextRenderer, IValue, VAR_NOW, VAR_RANDOM, VAR_UUID } from "./core";
 
 export class NumberValue implements IValue {
     constructor(public value: number) { }
@@ -52,10 +52,37 @@ export class RandomValue implements IValue {
     }
 }
 
+export type UUIDOptions = { withBrackets: boolean, upperCase: boolean }
+export class UUIDValue implements IValue {
+    value: string;
+
+    constructor(public opts: UUIDOptions) {
+        this.value = crypto.randomUUID();
+        if (this.opts.upperCase) {
+            this.value = this.value.toUpperCase();
+        }
+        if (this.opts.withBrackets) {
+            this.value = `{${this.value}}`;
+        }
+    }
+
+    next(step: number) {
+        return new UUIDValue(this.opts);
+    }
+
+    format(renderer: ITextRenderer) {
+        return this.value;
+    }
+}
+
 export function isNow(value: any) {
     return VAR_NOW.includes(value);
 }
 
 export function isRandom(value: any) {
     return VAR_RANDOM.includes(value);
+}
+
+export function isUUID(value: any) {
+    return VAR_UUID.includes(value);
 }
